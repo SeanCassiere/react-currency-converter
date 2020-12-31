@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Box,
   Container,
@@ -15,7 +15,10 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { DeleteIcon } from "@chakra-ui/icons"
 
-import { REMOVE_FROM_FAVORITES } from "../constants/favoritesConstants"
+import {
+  LIST_ALL_FAVORITES,
+  REMOVE_FROM_FAVORITES,
+} from "../constants/favoritesConstants"
 
 const FavoriteList = () => {
   const dispatch = useDispatch()
@@ -26,9 +29,29 @@ const FavoriteList = () => {
     dispatch({ type: REMOVE_FROM_FAVORITES, payload: id })
   }
 
+  const handleSetItem = () => {
+    const data = [
+      {
+        fromCurrency: "USD",
+        fromAmount: "0.00",
+        toCurrency: "LKR",
+        toAmount: "0.00",
+        itemName: "",
+        date: "1/1/2021, 12:59:27 AM",
+      },
+    ]
+    const req = JSON.stringify(data)
+    localStorage.setItem("SC_CURR_FAVS", req)
+  }
+
+  useEffect(() => {
+    dispatch({ type: LIST_ALL_FAVORITES })
+  }, [dispatch])
+
   return (
     <div style={{ marginTop: "4rem", marginBottom: "2rem" }}>
       <Container maxW='4xl' centerContent>
+        <button onClick={handleSetItem}>Click</button>
         <Box padding='4' bg='white' maxW='4xl' w='100%'>
           <Table variant='striped'>
             <TableCaption>Your saved currency conversions</TableCaption>
