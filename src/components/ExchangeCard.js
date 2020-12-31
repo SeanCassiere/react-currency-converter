@@ -82,6 +82,7 @@ const ExchangeCard = () => {
   }
 
   const handleReset = () => {
+    setCannotSave(true)
     setFromCurrency(initialState.fromCurrency)
     setToCurrency(initialState.toCurrency)
     setFromAmount(initialState.fromAmount)
@@ -132,6 +133,7 @@ const ExchangeCard = () => {
                 precision={2}
                 min={0}
                 onChange={(value) => setFromAmount(value)}
+                autocomplete='off'
               >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -179,6 +181,7 @@ const ExchangeCard = () => {
                 placeholder='Item Name'
                 value={itemName}
                 onChange={(e) => setItemName(e.target.value)}
+                autocomplete='off'
               />
               <FormHelperText>
                 Maybe this is a price conversion for a product?
