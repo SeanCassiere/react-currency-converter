@@ -1,6 +1,12 @@
 .header {
   display: block;
-  min-height: 50vh;
+  min-height: 35vh;
   color: #fff;
   background: linear-gradient(90deg, #2c3e50 0%, #89565c 52.08%, #fd746c 100%);
+}
+
+.exchangeCard {
+  margin-top: -25vh;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
 }
