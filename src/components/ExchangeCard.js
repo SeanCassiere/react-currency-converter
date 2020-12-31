@@ -56,20 +56,24 @@ const ExchangeCard = () => {
     setTimeout(() => {
       setIsSearching(false)
       setCannotSave(false)
-    }, 1500)
+    }, 1)
   }
 
   const handleSave = () => {
+    const dateNow = new Date(Date.now())
+    const formattedDate = dateNow.toLocaleString()
+    const finalItemName = itemName || "<No Name>"
     const saveData = {
       fromCurrency,
       fromAmount,
       toCurrency,
       toAmount,
-      itemName,
-      date: Date.now(),
+      itemName: finalItemName,
+      date: formattedDate,
     }
     dispatch({ type: ADD_TO_FAVORITES, payload: saveData })
     console.log("saving")
+    setCannotSave(true)
     setFromCurrency(initialState.fromCurrency)
     setFromAmount(initialState.fromAmount)
     setToCurrency(initialState.toCurrency)
