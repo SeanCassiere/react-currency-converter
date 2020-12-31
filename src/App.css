@@ -1,0 +1,6 @@
+.header {
+  display: block;
+  min-height: 50vh;
+  color: #fff;
+  background: linear-gradient(90deg, #2c3e50 0%, #89565c 52.08%, #fd746c 100%);
+}
