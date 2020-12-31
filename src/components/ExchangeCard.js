@@ -22,33 +22,58 @@ import {
 
 import { RepeatClockIcon, PlusSquareIcon } from "@chakra-ui/icons"
 
+const initialState = {
+  fromCurrency: "USD",
+  toCurrency: "USD",
+  fromAmount: "0.00",
+  itemName: "",
+}
+
+const currencies = ["DKK", "MYR", "USD", "LKR", "GBP"]
+
 const ExchangeCard = () => {
   const showDebugger = false
 
-  const [fromCurrency, setFromCurrency] = useState("USD")
-  const [toCurrency, setToCurrency] = useState("USD")
-  const [fromAmount, setFromAmount] = useState("0.00")
-  const [itemName, setItemName] = useState("")
+  const [fromCurrency, setFromCurrency] = useState(initialState.fromCurrency)
+  const [toCurrency, setToCurrency] = useState(initialState.toCurrency)
+  const [fromAmount, setFromAmount] = useState(initialState.fromAmount)
+  const [itemName, setItemName] = useState(initialState.itemName)
+
+  const handleSubmit = () => {
+    console.log("submitting")
+  }
+
+  const handleReset = () => {
+    setFromCurrency(initialState.fromCurrency)
+    setToCurrency(initialState.toCurrency)
+    setFromAmount(initialState.fromAmount)
+    setItemName(initialState.itemName)
+    console.log("Form Reset")
+  }
 
   return (
     <Container maxW='xs' centerContent className='exchangeCard' padding='0'>
-      <Box padding='10' bg='white' w='100%'>
+      <Box padding='7' bg='white' w='100%'>
         <Center margin='2'>
           <Heading as='h1' size='xl'>
             CURRENCY CONVERTER
           </Heading>
         </Center>
 
-        <Grid templateColumns='repeat(12, 1fr)' gap={3}>
+        <Grid templateColumns='repeat(12, 1fr)' gap={2}>
           <GridItem colSpan={5}>
             <FormControl id='from-currency'>
               <FormLabel>From</FormLabel>
               <Select
                 variant='outline'
                 onChange={(e) => setFromCurrency(e.target.value)}
+                value={fromCurrency}
               >
-                <option value='USD'>USD</option>
-                <option value='LKR'>LKR</option>
+                {currencies.map((value) => (
+                  <option value={value} key={value}>
+                    {value}
+                  </option>
+                ))}
               </Select>
             </FormControl>
           </GridItem>
@@ -56,7 +81,7 @@ const ExchangeCard = () => {
             <FormControl id='from-amount'>
               <FormLabel>Amount</FormLabel>
               <NumberInput
-                defaultValue={fromAmount}
+                value={fromAmount}
                 precision={2}
                 min={0}
                 onChange={(value) => setFromAmount(value)}
@@ -76,9 +101,13 @@ const ExchangeCard = () => {
               <Select
                 variant='outline'
                 onChange={(e) => setToCurrency(e.target.value)}
+                value={toCurrency}
               >
-                <option value='USD'>USD</option>
-                <option value='LKR'>LKR</option>
+                {currencies.map((value) => (
+                  <option value={value} key={value}>
+                    {value}
+                  </option>
+                ))}
               </Select>
             </FormControl>
           </GridItem>
@@ -86,12 +115,13 @@ const ExchangeCard = () => {
           <GridItem colSpan={7}>
             <FormControl id='to-value'>
               <FormLabel>Value</FormLabel>
-              <NumberInput defaultValue={15} precision={2} min={0}>
+              <NumberInput
+                defaultValue={0.0}
+                precision={2}
+                min={0}
+                isReadOnly={true}
+              >
                 <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
               </NumberInput>
             </FormControl>
           </GridItem>
@@ -115,6 +145,7 @@ const ExchangeCard = () => {
               colorScheme='pink'
               variant='outline'
               style={{ width: "100%" }}
+              onClick={handleReset}
             >
               Reset
             </Button>
@@ -126,6 +157,7 @@ const ExchangeCard = () => {
               colorScheme='teal'
               variant='solid'
               style={{ width: "100%" }}
+              onClick={handleSubmit}
             >
               Save
             </Button>
