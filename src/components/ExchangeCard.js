@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import { currencies } from "../utils/currencies"
 
 import {
   Box,
@@ -20,7 +21,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react"
 
-import { RepeatClockIcon, PlusSquareIcon } from "@chakra-ui/icons"
+import { RepeatClockIcon, PlusSquareIcon, Search2Icon } from "@chakra-ui/icons"
 
 const initialState = {
   fromCurrency: "USD",
@@ -29,18 +30,29 @@ const initialState = {
   itemName: "",
 }
 
-const currencies = ["DKK", "MYR", "USD", "LKR", "GBP"]
-
 const ExchangeCard = () => {
   const showDebugger = false
 
-  const [fromCurrency, setFromCurrency] = useState(initialState.fromCurrency)
-  const [toCurrency, setToCurrency] = useState(initialState.toCurrency)
-  const [fromAmount, setFromAmount] = useState(initialState.fromAmount)
-  const [itemName, setItemName] = useState(initialState.itemName)
+  const [fromCurrency, setFromCurrency] = useState("")
+  const [toCurrency, setToCurrency] = useState("")
+  const [fromAmount, setFromAmount] = useState("")
+  const [itemName, setItemName] = useState("")
+  const [isSearching, setIsSearching] = useState(false)
 
   const handleSubmit = () => {
+    setIsSearching(true)
     console.log("submitting")
+    setTimeout(() => {
+      setIsSearching(false)
+    }, 5000)
+  }
+
+  const handleSave = () => {
+    setFromCurrency(initialState.fromCurrency)
+    setToCurrency(initialState.toCurrency)
+    setFromAmount(initialState.fromAmount)
+    setItemName(initialState.itemName)
+    console.log("saving")
   }
 
   const handleReset = () => {
@@ -50,6 +62,13 @@ const ExchangeCard = () => {
     setItemName(initialState.itemName)
     console.log("Form Reset")
   }
+
+  useEffect(() => {
+    setFromCurrency(initialState.fromCurrency)
+    setToCurrency(initialState.toCurrency)
+    setFromAmount(initialState.fromAmount)
+    setItemName(initialState.itemName)
+  }, [])
 
   return (
     <Container maxW='xs' centerContent className='exchangeCard' padding='0'>
@@ -139,6 +158,19 @@ const ExchangeCard = () => {
             </FormControl>
           </GridItem>
 
+          <GridItem colSpan={12}>
+            <Button
+              leftIcon={<Search2Icon />}
+              colorScheme='teal'
+              variant='solid'
+              style={{ width: "100%" }}
+              onClick={handleSubmit}
+              isLoading={isSearching}
+            >
+              Search
+            </Button>
+          </GridItem>
+
           <GridItem colSpan={5}>
             <Button
               leftIcon={<RepeatClockIcon />}
@@ -155,9 +187,9 @@ const ExchangeCard = () => {
             <Button
               leftIcon={<PlusSquareIcon />}
               colorScheme='teal'
-              variant='solid'
+              variant='outline'
               style={{ width: "100%" }}
-              onClick={handleSubmit}
+              onClick={handleSave}
             >
               Save
             </Button>
