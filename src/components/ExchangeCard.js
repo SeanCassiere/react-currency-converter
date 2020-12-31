@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { currencies } from "../utils/currencies"
+import { useDispatch } from "react-redux"
+
+import { ADD_TO_FAVORITES } from "../constants/favoritesConstants"
 
 import {
   Box,
@@ -19,40 +22,59 @@ import {
   FormHelperText,
   Button,
   FormLabel,
+  Divider,
 } from "@chakra-ui/react"
 
 import { RepeatClockIcon, PlusSquareIcon, Search2Icon } from "@chakra-ui/icons"
 
 const initialState = {
   fromCurrency: "USD",
-  toCurrency: "USD",
   fromAmount: "0.00",
+  toCurrency: "LKR",
+  toAmount: "0.00",
   itemName: "",
 }
 
 const ExchangeCard = () => {
   const showDebugger = false
 
+  const dispatch = useDispatch()
+
   const [fromCurrency, setFromCurrency] = useState("")
-  const [toCurrency, setToCurrency] = useState("")
   const [fromAmount, setFromAmount] = useState("")
+  const [toCurrency, setToCurrency] = useState("")
+  const [toAmount, setToAmount] = useState("")
   const [itemName, setItemName] = useState("")
+
   const [isSearching, setIsSearching] = useState(false)
+  const [cannotSave, setCannotSave] = useState(true)
 
   const handleSubmit = () => {
+    setCannotSave(true)
     setIsSearching(true)
     console.log("submitting")
     setTimeout(() => {
       setIsSearching(false)
-    }, 5000)
+      setCannotSave(false)
+    }, 1500)
   }
 
   const handleSave = () => {
-    setFromCurrency(initialState.fromCurrency)
-    setToCurrency(initialState.toCurrency)
-    setFromAmount(initialState.fromAmount)
-    setItemName(initialState.itemName)
+    const saveData = {
+      fromCurrency,
+      fromAmount,
+      toCurrency,
+      toAmount,
+      itemName,
+      date: Date.now(),
+    }
+    dispatch({ type: ADD_TO_FAVORITES, payload: saveData })
     console.log("saving")
+    setFromCurrency(initialState.fromCurrency)
+    setFromAmount(initialState.fromAmount)
+    setToCurrency(initialState.toCurrency)
+    setToAmount(initialState.toAmount)
+    setItemName(initialState.itemName)
   }
 
   const handleReset = () => {
@@ -65,8 +87,9 @@ const ExchangeCard = () => {
 
   useEffect(() => {
     setFromCurrency(initialState.fromCurrency)
-    setToCurrency(initialState.toCurrency)
     setFromAmount(initialState.fromAmount)
+    setToCurrency(initialState.toCurrency)
+    setToAmount(initialState.toAmount)
     setItemName(initialState.itemName)
   }, [])
 
@@ -76,6 +99,7 @@ const ExchangeCard = () => {
         <Center margin='2'>
           <Heading as='h1' size='xl'>
             CURRENCY CONVERTER
+            <Divider />
           </Heading>
         </Center>
 
@@ -135,7 +159,7 @@ const ExchangeCard = () => {
             <FormControl id='to-value'>
               <FormLabel>Value</FormLabel>
               <NumberInput
-                defaultValue={0.0}
+                value={toAmount}
                 precision={2}
                 min={0}
                 isReadOnly={true}
@@ -190,6 +214,7 @@ const ExchangeCard = () => {
               variant='outline'
               style={{ width: "100%" }}
               onClick={handleSave}
+              disabled={cannotSave}
             >
               Save
             </Button>
