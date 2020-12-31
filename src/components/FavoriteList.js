@@ -29,21 +29,6 @@ const FavoriteList = () => {
     dispatch({ type: REMOVE_FROM_FAVORITES, payload: id })
   }
 
-  const handleSetItem = () => {
-    const data = [
-      {
-        fromCurrency: "USD",
-        fromAmount: "0.00",
-        toCurrency: "LKR",
-        toAmount: "0.00",
-        itemName: "",
-        date: "1/1/2021, 12:59:27 AM",
-      },
-    ]
-    const req = JSON.stringify(data)
-    localStorage.setItem("SC_CURR_FAVS", req)
-  }
-
   useEffect(() => {
     dispatch({ type: LIST_ALL_FAVORITES })
   }, [dispatch])
@@ -51,7 +36,6 @@ const FavoriteList = () => {
   return (
     <div style={{ marginTop: "4rem", marginBottom: "2rem" }}>
       <Container maxW='4xl' centerContent>
-        <button onClick={handleSetItem}>Click</button>
         <Box padding='4' bg='white' maxW='4xl' w='100%'>
           <Table variant='striped'>
             <TableCaption>Your saved currency conversions</TableCaption>
@@ -67,7 +51,13 @@ const FavoriteList = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {favoritesList.length === 0 ? <p>No Favorites Saved</p> : null}
+              {favoritesList.length === 0 ? (
+                <Tr>
+                  <Td colSpan='7'>
+                    You haven't save any of your past currency conversions.
+                  </Td>
+                </Tr>
+              ) : null}
               {favoritesList.map((item, i) => {
                 return (
                   <Tr key={i}>
