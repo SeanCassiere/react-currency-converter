@@ -5,17 +5,18 @@ import {
   Box,
   Container,
   Center,
-  IconButton,
   Grid,
-  GridItem,
   Heading,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react"
-import { DeleteIcon } from "@chakra-ui/icons"
 
 import {
   LIST_ALL_FAVORITES,
   REMOVE_FROM_FAVORITES,
 } from "../constants/favoritesConstants"
+
+import FavoriteCardItem from "../components/FavoriteCardItem"
 
 const FavoriteList = () => {
   const dispatch = useDispatch()
@@ -34,54 +35,47 @@ const FavoriteList = () => {
     <div style={{ marginTop: "4rem", marginBottom: "4rem" }}>
       <Center>
         <Container
-          maxW={{ sm: "30em", md: "80vw" }}
+          maxW={{ sm: "30em", md: "70vw" }}
           margin={{ sm: "2rem", md: "2" }}
-          center
+          centerContent
         >
-          <Box w='100%' style={{ marginBottom: "1.5rem" }}>
+          <Box w='100%' style={{ marginBottom: "2rem" }}>
             <Center>
               <Heading as='h1' size='lg'>
                 PAST SAVED CONVERSIONS
               </Heading>
             </Center>
           </Box>
-
-          <Grid
-            templateColumns={{ sm: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
-            gap={3}
-            margin='2'
-          >
-            {favoritesList.map((item, i) => {
-              return (
-                <GridItem colSpan={1} margin='1' key={i}>
-                  <Box
-                    w='100%'
-                    bg='gray.100'
-                    className='favoriteCard'
-                    padding='2'
-                  >
-                    <Grid templateColumns='repeat(12, 1fr)' gap={0}>
-                      <GridItem colSpan={10}>{item.date}</GridItem>
-                      <GridItem colSpan={2} style={{ textAlign: "right" }}>
-                        <IconButton
-                          size='sm'
-                          colorScheme='red'
-                          aria-label='Delete Conversion'
-                          icon={<DeleteIcon />}
-                          onClick={() => handleDelete(item)}
-                        />
-                      </GridItem>
-                      <GridItem colSpan={6}>{item.fromCurrency}</GridItem>
-                      <GridItem colSpan={6}>{item.toCurrency}</GridItem>
-                      <GridItem colSpan={6}>{item.fromAmount}</GridItem>
-                      <GridItem colSpan={6}>{item.toAmount}</GridItem>
-                      <GridItem colSpan={12}>{item.itemName}</GridItem>
-                    </Grid>
-                  </Box>
-                </GridItem>
-              )
-            })}
-          </Grid>
+          {favoritesList.length === 0 ? (
+            <Box>
+              <Alert status='warning'>
+                <AlertIcon />
+                Seems you haven't saved any of your previous currency
+                conversions.
+              </Alert>
+            </Box>
+          ) : (
+            <Grid
+              w='100'
+              templateColumns={{
+                sm: "repeat(1, 1fr)",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(3, 1fr)",
+                xl: "repeat(4, 1fr)",
+              }}
+              gap={7}
+            >
+              {favoritesList.map((item) => {
+                return (
+                  <FavoriteCardItem
+                    key={item.date}
+                    item={item}
+                    handleDelete={handleDelete}
+                  />
+                )
+              })}
+            </Grid>
+          )}
         </Container>
         <br />
         <br />
