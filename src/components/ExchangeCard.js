@@ -114,7 +114,12 @@ const ExchangeCard = () => {
 
   return (
     <>
-      <Container maxW='xs' centerContent className='exchangeCard' padding='0'>
+      <Container
+        maxW='xs'
+        centerContent
+        className='shallowFloatingCard home-exchangeCard'
+        padding='0'
+      >
         <Box padding='7' bg='white' w='100%'>
           <Center margin='2'>
             <Heading as='h1' size='xl'>
@@ -128,9 +133,10 @@ const ExchangeCard = () => {
               <FormControl id='from-currency'>
                 <FormLabel>From</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='40px' />
+                  <Skeleton height='47px' />
                 ) : (
                   <Select
+                    size='lg'
                     variant='outline'
                     onChange={(e) => setFromCurrency(e.target.value)}
                     value={fromCurrency}
@@ -148,9 +154,10 @@ const ExchangeCard = () => {
               <FormControl id='from-amount'>
                 <FormLabel>Amount</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='40px' />
+                  <Skeleton height='47px' />
                 ) : (
                   <NumberInput
+                    size='lg'
                     value={fromAmount}
                     precision={2}
                     min={0}
@@ -178,9 +185,10 @@ const ExchangeCard = () => {
               <FormControl id='to-currency'>
                 <FormLabel>To</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='40px' />
+                  <Skeleton height='47px' />
                 ) : (
                   <Select
+                    size='lg'
                     variant='outline'
                     onChange={(e) => {
                       setToCurrency(e.target.value)
@@ -202,9 +210,10 @@ const ExchangeCard = () => {
               <FormControl id='to-value'>
                 <FormLabel>Value</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='40px' />
+                  <Skeleton height='47px' />
                 ) : (
                   <NumberInput
+                    size='lg'
                     value={toAmount}
                     precision={2}
                     min={0}
@@ -218,6 +227,7 @@ const ExchangeCard = () => {
 
             <GridItem colSpan={12}>
               <FormControl id='item-name'>
+                <FormLabel>Item Name</FormLabel>
                 {isLoading ? (
                   <>
                     <Skeleton height='40px' />
@@ -228,7 +238,7 @@ const ExchangeCard = () => {
                 ) : (
                   <>
                     <Input
-                      placeholder='Item Name'
+                      placeholder='eg: Phone, Laptop, etc...'
                       value={itemName}
                       onChange={(e) => setItemName(e.target.value)}
                       autoComplete='off'

@@ -13,13 +13,21 @@ import {
 
 import { DeleteIcon } from "@chakra-ui/icons"
 
-const FavoriteCardItem = ({ item, handleDelete }) => {
+const FavoriteCardItem = ({ item, handleDelete, index }) => {
   return (
     <GridItem colSpan={1} w='100%'>
-      <Box w='100%' bg='gray.100' className='favoriteCard' padding='2'>
+      <Box
+        w='100%'
+        bg='#FAF9F9'
+        className='shallowFloatingCard favoriteItemCard'
+        padding='2'
+      >
         <Grid templateColumns='repeat(12, 1fr)' gap={1}>
           <GridItem colSpan={10}>
-            <Badge variant='outline' colorScheme='green'>
+            <Badge
+              variant={index === 0 ? "solid" : "outline"}
+              colorScheme='green'
+            >
               {item.date}
             </Badge>
           </GridItem>

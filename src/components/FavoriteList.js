@@ -32,7 +32,7 @@ const FavoriteList = () => {
   }, [dispatch])
 
   return (
-    <div style={{ marginTop: "4rem", marginBottom: "4rem" }}>
+    <div className='favoriteList'>
       <Center>
         <Container
           maxW={{ sm: "30em", md: "70vw" }}
@@ -64,12 +64,14 @@ const FavoriteList = () => {
                 xl: "repeat(4, 1fr)",
               }}
               gap={7}
+              className='home-favoriteList-mb'
             >
-              {favoritesList.map((item) => {
+              {favoritesList.map((item, i) => {
                 return (
                   <FavoriteCardItem
-                    key={item.date}
+                    key={i}
                     item={item}
+                    index={i}
                     handleDelete={handleDelete}
                   />
                 )
@@ -77,11 +79,6 @@ const FavoriteList = () => {
             </Grid>
           )}
         </Container>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
       </Center>
     </div>
   )
