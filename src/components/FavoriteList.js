@@ -1,18 +1,15 @@
 import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+
 import {
   Box,
   Container,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
+  Center,
   IconButton,
+  Grid,
+  GridItem,
+  Heading,
 } from "@chakra-ui/react"
-import { useSelector, useDispatch } from "react-redux"
-
 import { DeleteIcon } from "@chakra-ui/icons"
 
 import {
@@ -34,55 +31,64 @@ const FavoriteList = () => {
   }, [dispatch])
 
   return (
-    <div style={{ marginTop: "4rem", marginBottom: "2rem" }}>
-      <Container maxW='4xl' centerContent>
-        <Box padding='4' bg='white' maxW='4xl' w='100%'>
-          <Table variant='striped'>
-            <TableCaption>Your saved currency conversions</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Date</Th>
-                <Th>From $</Th>
-                <Th isNumeric>Amount</Th>
-                <Th>To $</Th>
-                <Th isNumeric>Value</Th>
-                <Th>Item Name</Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {favoritesList.length === 0 ? (
-                <Tr>
-                  <Td colSpan='7'>
-                    You haven't save any of your past currency conversions.
-                  </Td>
-                </Tr>
-              ) : null}
-              {favoritesList.map((item, i) => {
-                return (
-                  <Tr key={i}>
-                    <Td>{item.date}</Td>
-                    <Td>{item.fromCurrency}</Td>
-                    <Td isNumeric>{item.fromAmount}</Td>
-                    <Td>{item.toCurrency}</Td>
-                    <Td isNumeric>{item.toAmount}</Td>
-                    <Td>{item.itemName}</Td>
-                    <Td>
-                      <IconButton
-                        size='sm'
-                        colorScheme='red'
-                        aria-label='Delete Conversion'
-                        icon={<DeleteIcon />}
-                        onClick={() => handleDelete(item)}
-                      />
-                    </Td>
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
-        </Box>
-      </Container>
+    <div style={{ marginTop: "4rem", marginBottom: "4rem" }}>
+      <Center>
+        <Container
+          maxW={{ sm: "30em", md: "80vw" }}
+          margin={{ sm: "2rem", md: "2" }}
+          center
+        >
+          <Box w='100%' style={{ marginBottom: "1.5rem" }}>
+            <Center>
+              <Heading as='h1' size='lg'>
+                PAST SAVED CONVERSIONS
+              </Heading>
+            </Center>
+          </Box>
+
+          <Grid
+            templateColumns={{ sm: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
+            gap={3}
+            margin='2'
+          >
+            {favoritesList.map((item, i) => {
+              return (
+                <GridItem colSpan={1} margin='1' key={i}>
+                  <Box
+                    w='100%'
+                    bg='gray.100'
+                    className='favoriteCard'
+                    padding='2'
+                  >
+                    <Grid templateColumns='repeat(12, 1fr)' gap={0}>
+                      <GridItem colSpan={10}>{item.date}</GridItem>
+                      <GridItem colSpan={2} style={{ textAlign: "right" }}>
+                        <IconButton
+                          size='sm'
+                          colorScheme='red'
+                          aria-label='Delete Conversion'
+                          icon={<DeleteIcon />}
+                          onClick={() => handleDelete(item)}
+                        />
+                      </GridItem>
+                      <GridItem colSpan={6}>{item.fromCurrency}</GridItem>
+                      <GridItem colSpan={6}>{item.toCurrency}</GridItem>
+                      <GridItem colSpan={6}>{item.fromAmount}</GridItem>
+                      <GridItem colSpan={6}>{item.toAmount}</GridItem>
+                      <GridItem colSpan={12}>{item.itemName}</GridItem>
+                    </Grid>
+                  </Box>
+                </GridItem>
+              )
+            })}
+          </Grid>
+        </Container>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </Center>
     </div>
   )
 }

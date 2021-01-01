@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { currencies } from "../utils/currencies"
 import { useDispatch } from "react-redux"
 
@@ -52,7 +52,7 @@ const ExchangeCard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [cannotSave, setCannotSave] = useState(true)
 
-  const searchQuery = React.useCallback(async () => {
+  const searchQuery = useCallback(async () => {
     setIsLoading(true)
     // https://open.exchangerate-api.com/v6/latest                                                  setRates(data.rates)
     // https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}   setRates(data.conversion_rates)
