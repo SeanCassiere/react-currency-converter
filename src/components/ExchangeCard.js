@@ -28,7 +28,7 @@ import {
   Skeleton,
 } from "@chakra-ui/react"
 
-import { RepeatClockIcon, PlusSquareIcon, Search2Icon } from "@chakra-ui/icons"
+import { RepeatClockIcon, PlusSquareIcon } from "@chakra-ui/icons"
 
 const initialState = {
   fromCurrency: "USD",
@@ -39,8 +39,6 @@ const initialState = {
 }
 
 const ExchangeCard = () => {
-  const showDebugger = false
-
   const dispatch = useDispatch()
 
   const [rates, setRates] = useState({})
@@ -52,7 +50,6 @@ const ExchangeCard = () => {
   const [itemName, setItemName] = useState(initialState.itemName)
 
   const [isLoading, setIsLoading] = useState(true)
-  const [isSearching, setIsSearching] = useState(false)
   const [cannotSave, setCannotSave] = useState(true)
 
   const searchQuery = React.useCallback(async () => {
@@ -60,26 +57,16 @@ const ExchangeCard = () => {
     // https://open.exchangerate-api.com/v6/latest                                                  setRates(data.rates)
     // https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}   setRates(data.conversion_rates)
     try {
-      const req = await axios.get(
-        `https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}`
-      )
+      const req = await axios.get(`https://open.exchangerate-api.com/v6/latest`)
       const { data } = req
 
       console.log("Running callback with Currency:", fromCurrency)
-      // setRates(data.rates)
-      setRates(data.conversion_rates)
+      setRates(data.rates)
     } catch (err) {
       return err
     }
     setIsLoading(false)
   }, [fromCurrency])
-
-  const handleConversion = (value) => {
-    setFromAmount(value)
-    const converted_amount_raw = value * rates[`${toCurrency}`]
-    const converted_amount = converted_amount_raw.toFixed(2)
-    setToAmount(converted_amount)
-  }
 
   useEffect(() => {
     setCannotSave(true)
@@ -87,14 +74,20 @@ const ExchangeCard = () => {
     // eslint-disable-next-line
   }, [fromCurrency])
 
-  const handleSubmit = () => {
-    setCannotSave(true)
-    setIsSearching(true)
-    console.log("submitting")
-    setTimeout(() => {
-      setIsSearching(false)
-      setCannotSave(false)
-    }, 1)
+  const resetState = () => {
+    setFromCurrency(initialState.fromCurrency)
+    setFromAmount(initialState.fromAmount)
+    setToCurrency(initialState.toCurrency)
+    setToAmount(initialState.toAmount)
+    setItemName(initialState.itemName)
+  }
+
+  const handleConversion = (value, currency) => {
+    setFromAmount(value)
+    const converted_amount_raw = value * rates[`${currency}`]
+    const converted_amount = converted_amount_raw.toFixed(2)
+
+    setToAmount(converted_amount)
   }
 
   const handleSave = () => {
@@ -111,19 +104,12 @@ const ExchangeCard = () => {
     }
     dispatch({ type: ADD_TO_FAVORITES, payload: saveData })
     setCannotSave(true)
-    setFromCurrency(initialState.fromCurrency)
-    setFromAmount(initialState.fromAmount)
-    setToCurrency(initialState.toCurrency)
-    setToAmount(initialState.toAmount)
-    setItemName(initialState.itemName)
+    resetState()
   }
 
   const handleReset = () => {
     setCannotSave(true)
-    setFromCurrency(initialState.fromCurrency)
-    setToCurrency(initialState.toCurrency)
-    setFromAmount(initialState.fromAmount)
-    setItemName(initialState.itemName)
+    resetState()
   }
 
   return (
@@ -168,7 +154,14 @@ const ExchangeCard = () => {
                     value={fromAmount}
                     precision={2}
                     min={0}
-                    onChange={(value) => handleConversion(value)}
+                    onChange={(value) => {
+                      handleConversion(value, toCurrency)
+                      if (value > 0) {
+                        setCannotSave(false)
+                      } else {
+                        setCannotSave(true)
+                      }
+                    }}
                     autoComplete='off'
                   >
                     <NumberInputField />
@@ -191,7 +184,7 @@ const ExchangeCard = () => {
                     variant='outline'
                     onChange={(e) => {
                       setToCurrency(e.target.value)
-                      handleConversion(fromAmount)
+                      handleConversion(fromAmount, e.target.value)
                     }}
                     value={toCurrency}
                   >
@@ -246,23 +239,6 @@ const ExchangeCard = () => {
                   </>
                 )}
               </FormControl>
-            </GridItem>
-
-            <GridItem colSpan={12}>
-              {isLoading ? (
-                <Skeleton height='40px' />
-              ) : (
-                <Button
-                  leftIcon={<Search2Icon />}
-                  colorScheme='teal'
-                  variant='solid'
-                  style={{ width: "100%" }}
-                  onClick={handleSubmit}
-                  isLoading={isSearching}
-                >
-                  Search
-                </Button>
-              )}
             </GridItem>
 
             <GridItem colSpan={5}>
