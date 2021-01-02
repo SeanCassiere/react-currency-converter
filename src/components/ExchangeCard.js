@@ -139,9 +139,9 @@ const ExchangeCard = () => {
 
           {isError && (
             <Box>
-              <Alert status='warning'>
+              <Alert status='error'>
                 <AlertIcon />
-                Problem with the API.
+                There was a network error.
               </Alert>
             </Box>
           )}
