@@ -150,13 +150,10 @@ const ExchangeCard = () => {
             <GridItem colSpan={5}>
               <FormControl id='from-currency'>
                 <FormLabel>From</FormLabel>
-                {isLoading ? (
-                  <Skeleton
-                    height={
-                      !isError ? skeleton.fullHeight : skeleton.errorHeight
-                    }
-                  />
-                ) : (
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                  isLoaded={!isLoading}
+                >
                   <Select
                     size='lg'
                     variant='outline'
@@ -169,19 +166,16 @@ const ExchangeCard = () => {
                       </option>
                     ))}
                   </Select>
-                )}
+                </Skeleton>
               </FormControl>
             </GridItem>
             <GridItem colSpan={7}>
               <FormControl id='from-amount'>
                 <FormLabel>Amount</FormLabel>
-                {isLoading ? (
-                  <Skeleton
-                    height={
-                      !isError ? skeleton.fullHeight : skeleton.errorHeight
-                    }
-                  />
-                ) : (
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                  isLoaded={!isLoading}
+                >
                   <NumberInput
                     size='lg'
                     value={fromAmount}
@@ -203,20 +197,17 @@ const ExchangeCard = () => {
                       <NumberDecrementStepper />
                     </NumberInputStepper>
                   </NumberInput>
-                )}
+                </Skeleton>
               </FormControl>
             </GridItem>
 
             <GridItem colSpan={5}>
               <FormControl id='to-currency'>
                 <FormLabel>To</FormLabel>
-                {isLoading ? (
-                  <Skeleton
-                    height={
-                      !isError ? skeleton.fullHeight : skeleton.errorHeight
-                    }
-                  />
-                ) : (
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                  isLoaded={!isLoading}
+                >
                   <Select
                     size='lg'
                     variant='outline'
@@ -232,20 +223,17 @@ const ExchangeCard = () => {
                       </option>
                     ))}
                   </Select>
-                )}
+                </Skeleton>
               </FormControl>
             </GridItem>
 
             <GridItem colSpan={7}>
               <FormControl id='to-value'>
                 <FormLabel>Value</FormLabel>
-                {isLoading ? (
-                  <Skeleton
-                    height={
-                      !isError ? skeleton.fullHeight : skeleton.errorHeight
-                    }
-                  />
-                ) : (
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                  isLoaded={!isLoading}
+                >
                   <NumberInput
                     size='lg'
                     value={toAmount}
@@ -255,48 +243,39 @@ const ExchangeCard = () => {
                   >
                     <NumberInputField />
                   </NumberInput>
-                )}
+                </Skeleton>
               </FormControl>
             </GridItem>
 
             <GridItem colSpan={12}>
               <FormControl id='item-name'>
                 <FormLabel>Item Name</FormLabel>
-                {isLoading ? (
-                  <>
-                    <Skeleton
-                      height={
-                        !isError ? skeleton.fullHeight : skeleton.errorHeight
-                      }
-                    />
-                    <FormHelperText>
-                      {!isError
-                        ? "We are still Loading the currency conversion rates."
-                        : "There was an error while connecting to the API."}
-                    </FormHelperText>
-                  </>
-                ) : (
-                  <>
-                    <Input
-                      placeholder='eg: Phone, Laptop, etc...'
-                      value={itemName}
-                      onChange={(e) => setItemName(e.target.value)}
-                      autoComplete='off'
-                    />
-                    <FormHelperText>
-                      Maybe this is a price conversion for a product?
-                    </FormHelperText>
-                  </>
-                )}
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                  isLoaded={!isLoading}
+                >
+                  <Input
+                    placeholder='eg: Phone, Laptop, etc...'
+                    value={itemName}
+                    onChange={(e) => setItemName(e.target.value)}
+                    autoComplete='off'
+                  />
+                </Skeleton>
+                <FormHelperText>
+                  {!isLoading
+                    ? "Maybe this is a price conversion for a product?"
+                    : !isError
+                    ? "We are still Loading the currency conversion rates."
+                    : "There was an error while connecting to the API."}
+                </FormHelperText>
               </FormControl>
             </GridItem>
 
             <GridItem colSpan={5}>
-              {isLoading ? (
-                <Skeleton
-                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
-                />
-              ) : (
+              <Skeleton
+                height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                isLoaded={!isLoading}
+              >
                 <Button
                   leftIcon={<RepeatClockIcon />}
                   colorScheme='pink'
@@ -306,15 +285,14 @@ const ExchangeCard = () => {
                 >
                   Reset
                 </Button>
-              )}
+              </Skeleton>
             </GridItem>
 
             <GridItem colSpan={7}>
-              {isLoading ? (
-                <Skeleton
-                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
-                />
-              ) : (
+              <Skeleton
+                height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                isLoaded={!isLoading}
+              >
                 <Button
                   leftIcon={<PlusSquareIcon />}
                   colorScheme='teal'
@@ -325,7 +303,7 @@ const ExchangeCard = () => {
                 >
                   Save
                 </Button>
-              )}
+              </Skeleton>
             </GridItem>
           </Grid>
         </Box>
