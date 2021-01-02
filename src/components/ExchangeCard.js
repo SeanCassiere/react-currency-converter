@@ -7,6 +7,8 @@ import axios from "axios"
 import { ADD_TO_FAVORITES } from "../constants/favoritesConstants"
 
 import {
+  Alert,
+  AlertIcon,
   Box,
   Container,
   Heading,
@@ -38,6 +40,10 @@ const initialState = {
   itemName: "",
 }
 
+// This is the heights used for the Skeleton loading animations
+const skeleton = { fullHeight: "47px", errorHeight: "20px" }
+
+// ExchangeCard Component
 const ExchangeCard = () => {
   const dispatch = useDispatch()
 
@@ -51,21 +57,24 @@ const ExchangeCard = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [cannotSave, setCannotSave] = useState(true)
+  const [isError, setIsError] = useState(false)
 
   const searchQuery = useCallback(async () => {
     setIsLoading(true)
-    // https://open.exchangerate-api.com/v6/latest                                                  setRates(data.rates)
-    // https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}   setRates(data.conversion_rates)
+    // Used for Testing:    https://open.exchangerate-api.com/v6/latest                                                  setRates(data.rates)
+    // Used for Production: https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}   setRates(data.conversion_rates)
     try {
       const req = await axios.get(`https://open.exchangerate-api.com/v6/latest`)
       const { data } = req
 
       console.log("Running callback with Currency:", fromCurrency)
       setRates(data.rates)
+      setIsLoading(false)
     } catch (err) {
-      return err
+      console.error(err)
+      setIsError(true)
+      setIsLoading(true)
     }
-    setIsLoading(false)
   }, [fromCurrency])
 
   useEffect(() => {
@@ -128,12 +137,25 @@ const ExchangeCard = () => {
             </Heading>
           </Center>
 
+          {isError && (
+            <Box>
+              <Alert status='warning'>
+                <AlertIcon />
+                Problem with the API.
+              </Alert>
+            </Box>
+          )}
+
           <Grid templateColumns='repeat(12, 1fr)' gap={2}>
             <GridItem colSpan={5}>
               <FormControl id='from-currency'>
                 <FormLabel>From</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='47px' />
+                  <Skeleton
+                    height={
+                      !isError ? skeleton.fullHeight : skeleton.errorHeight
+                    }
+                  />
                 ) : (
                   <Select
                     size='lg'
@@ -154,7 +176,11 @@ const ExchangeCard = () => {
               <FormControl id='from-amount'>
                 <FormLabel>Amount</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='47px' />
+                  <Skeleton
+                    height={
+                      !isError ? skeleton.fullHeight : skeleton.errorHeight
+                    }
+                  />
                 ) : (
                   <NumberInput
                     size='lg'
@@ -185,7 +211,11 @@ const ExchangeCard = () => {
               <FormControl id='to-currency'>
                 <FormLabel>To</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='47px' />
+                  <Skeleton
+                    height={
+                      !isError ? skeleton.fullHeight : skeleton.errorHeight
+                    }
+                  />
                 ) : (
                   <Select
                     size='lg'
@@ -210,7 +240,11 @@ const ExchangeCard = () => {
               <FormControl id='to-value'>
                 <FormLabel>Value</FormLabel>
                 {isLoading ? (
-                  <Skeleton height='47px' />
+                  <Skeleton
+                    height={
+                      !isError ? skeleton.fullHeight : skeleton.errorHeight
+                    }
+                  />
                 ) : (
                   <NumberInput
                     size='lg'
@@ -230,9 +264,15 @@ const ExchangeCard = () => {
                 <FormLabel>Item Name</FormLabel>
                 {isLoading ? (
                   <>
-                    <Skeleton height='40px' />
+                    <Skeleton
+                      height={
+                        !isError ? skeleton.fullHeight : skeleton.errorHeight
+                      }
+                    />
                     <FormHelperText>
-                      We are still Loading the currency conversion rates.
+                      {!isError
+                        ? "We are still Loading the currency conversion rates."
+                        : "There was an error while connecting to the API."}
                     </FormHelperText>
                   </>
                 ) : (
@@ -253,7 +293,9 @@ const ExchangeCard = () => {
 
             <GridItem colSpan={5}>
               {isLoading ? (
-                <Skeleton height='40px' />
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                />
               ) : (
                 <Button
                   leftIcon={<RepeatClockIcon />}
@@ -269,7 +311,9 @@ const ExchangeCard = () => {
 
             <GridItem colSpan={7}>
               {isLoading ? (
-                <Skeleton height='40px' />
+                <Skeleton
+                  height={!isError ? skeleton.fullHeight : skeleton.errorHeight}
+                />
               ) : (
                 <Button
                   leftIcon={<PlusSquareIcon />}
