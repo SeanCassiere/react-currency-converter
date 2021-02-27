@@ -65,12 +65,12 @@ const ExchangeCard = () => {
 		// Used for Production: https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency}   setRates(data.conversion_rates)
 		try {
 			const req = await axios.get(
-				`https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_API_KEY}/latest/${fromCurrency} `
+				`https://open.exchangerate-api.com/v6/latest`
 			);
 			const { data } = req;
 
 			console.log("Running callback with Currency:", fromCurrency);
-			setRates(data.conversion_rates);
+			setRates(data.rates);
 			setIsLoading(false);
 		} catch (err) {
 			console.error(err);
